@@ -1,0 +1,32 @@
+specVersion: 0.2.0
+name: lesson5
+version: 1.0.0
+description: evm processor
+repository: ''
+schema:
+  file: ./schema.graphql
+network:
+  genesisHash: '0x401a1f9dca3da46f5c4091016c8a2f26dcea05865116b286f60f668207d1474b'
+  endpoint: wss://moonriver.api.onfinality.io/public-ws
+  chainTypes:
+    file: "./dist/chaintypes.js"
+  dictionary: "https://sz.api.subquery.network/sq/subquery/moonriver-dictionary"
+dataSources:
+  - kind: substrate/Moonbeam
+    processor:
+      file: './node_modules/@subql/contract-processors/dist/moonbeam.js'
+      options:
+        abi: erc20
+        address: '0x6bD193Ee6D2104F14F94E2cA6efefae561A4334B'
+    assets:
+      erc20:
+        file: './erc20.abi.json'
+    mapping:
+      file: './dist/index.js'
+      handlers:
+        - handler: erc20Transfer
+          kind: substrate/MoonbeamEvent
+          filter:
+            topics:
+              - Transfer(address indexed from,address indexed to,uint256 value)
+
